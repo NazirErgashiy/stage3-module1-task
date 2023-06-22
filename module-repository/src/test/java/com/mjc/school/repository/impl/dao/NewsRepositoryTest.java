@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NewsRepositoryTest {
 
-    NewsRepository newsRepository = new NewsRepository();
+    DataSourceRepository newsRepository = new DataSourceRepository();
 
 
     @Test

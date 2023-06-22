@@ -1,11 +1,9 @@
 package com.mjc.school.repository.impl.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.exceptions.NewsNotFoundRuntimeException;
 import com.mjc.school.repository.impl.model.Author;
 import com.mjc.school.repository.impl.model.News;
-import com.mjc.school.repository.mapper.NewsMapperImpl;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -13,9 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class NewsRepository {
+public class DataSourceRepository {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();//Jackson JSON
-    private final NewsMapperImpl mapper = new NewsMapperImpl();
 
     static {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
@@ -23,7 +20,7 @@ public class NewsRepository {
         OBJECT_MAPPER.findAndRegisterModules();
     }
 
-    public NewsRepository() {
+    public DataSourceRepository() {
     }
 
     public List<Author> getAllAuthors() {
@@ -103,12 +100,9 @@ public class NewsRepository {
         }
     }
 
-    public void createNews(){
+    public News createNews(News news){
         //Implement
-    }
-
-    public News toDataSource(NewsDTO newsDTO) {
-        return mapper.dtoToSource(newsDTO);
+        return news;
     }
 
     public News updateNews(News news) {
@@ -118,7 +112,7 @@ public class NewsRepository {
         return saveExistNews(news);
     }
 
-    public boolean deleteNews(News news) {
+    public Boolean deleteNews(News news) {
         List<News> allNews = new ArrayList<>(readAllNews());
 
         for (int i = 0; i < allNews.size(); i++) {

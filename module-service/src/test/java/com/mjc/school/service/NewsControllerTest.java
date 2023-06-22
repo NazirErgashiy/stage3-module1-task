@@ -2,7 +2,7 @@ package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.impl.dao.NewsRepository;
+import com.mjc.school.repository.impl.dao.DataSourceRepository;
 import com.mjc.school.repository.impl.model.Author;
 import com.mjc.school.repository.impl.model.News;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NewsControllerTest {
 
     private final NewsController NEWS_CONTROLLER = new NewsController();
-    private final NewsRepository REPOSITORY = new NewsRepository();
+    private final DataSourceRepository REPOSITORY = new DataSourceRepository();
     private final NewsMapperImpl NEWS_MAPPER = new NewsMapperImpl();
 
     private void clearRepository() {

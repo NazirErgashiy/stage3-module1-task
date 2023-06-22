@@ -2,7 +2,7 @@ package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.impl.dao.NewsRepository;
+import com.mjc.school.repository.impl.dao.DataSourceRepository;
 import com.mjc.school.repository.impl.model.Author;
 import com.mjc.school.repository.impl.model.News;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
@@ -20,7 +20,7 @@ import java.util.TimeZone;
 
 public class NewsController {
 
-    private NewsRepository repository = new NewsRepository();
+    private DataSourceRepository repository = new DataSourceRepository();
     private NewsMapperImpl newsMapper = new NewsMapperImpl();
 
     /**

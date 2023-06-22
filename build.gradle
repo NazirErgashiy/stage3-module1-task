@@ -1,6 +1,10 @@
+
 plugins {
     id 'java'
+    id 'net.ltgt.apt' version '0.20'
 }
+
+apply plugin: 'net.ltgt.apt-idea'
 
 wrapper {
     gradleVersion = gradlewVersion
@@ -10,20 +14,38 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
     group = 'com.mjc.school'
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
+        // Lombok
+        compileOnly 'org.projectlombok:lombok:1.18.26'
+        annotationProcessor 'org.projectlombok:lombok:1.18.26'
+        implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
+
+        // MapStruct
+        implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     }
 
+    jacoco {
+        toolVersion = "0.8.8"
+        reportsDir = file("$buildDir/jacoco")
+    }
+
     test {
         useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+    jacocoTestReport {
+        dependsOn test
     }
 }
 

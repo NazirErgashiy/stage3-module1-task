@@ -60,7 +60,7 @@ class NewsRepositoryTest {
         news2.setAuthorId(1);
         newArr.add(news2);
         newsRepository.saveAllNews(newArr);
-        ArrayList<News> arr = new ArrayList<>(newsRepository.getAllNews());
+        ArrayList<News> arr = new ArrayList<>(newsRepository.readAllNews());
 
         assertEquals(1, arr.get(0).getId());
         assertEquals("Tekken 8", arr.get(0).getTitle());

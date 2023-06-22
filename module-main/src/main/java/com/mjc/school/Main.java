@@ -27,7 +27,6 @@ public class Main {
             System.out.println("5 - Remove news by id.");
             System.out.println("0 - Exit.");
 
-
             try {
                 int input = reader.nextInt();
 

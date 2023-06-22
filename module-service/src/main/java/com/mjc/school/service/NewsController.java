@@ -31,7 +31,7 @@ public class NewsController {
      * @return NewsDTO from REPOSITORY
      */
     public NewsDTO createNews(NewsDTO newsDTO) {
-        List<News> news = new ArrayList<>(repository.getAllNews());
+        List<News> news = new ArrayList<>(repository.readAllNews());
 
         long newId = getNewId();
         newsDTO.setId(newId);
@@ -42,19 +42,19 @@ public class NewsController {
             News currentNewNews = newsMapper.dtoToSource(newsDTO);
             news.add(currentNewNews);
             repository.saveAllNews(news);
-            return newsMapper.sourceToDTO(repository.getNewsById(newId));
+            return newsMapper.sourceToDTO(repository.readByIdNews(newId));
         }
         throw new RuntimeException("Something gone wrong");
     }
 
     public NewsDTO getNews(long id) {
         //get newsDTO id and get it from repository, then map entity to DTO and return.
-        return newsMapper.sourceToDTO(repository.getNewsById(id));
+        return newsMapper.sourceToDTO(repository.readByIdNews(id));
     }
 
     public NewsDTO updateNews(NewsDTO newsDTO) {
         //if updating news is exists
-        repository.getNewsById(newsDTO.getId());
+        repository.readByIdNews(newsDTO.getId());
 
         if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {
             newsDTO.setLastUpdateDate(nowIso8601());
@@ -65,7 +65,7 @@ public class NewsController {
     }
 
     public boolean deleteNews(NewsDTO newsDTO) {
-        List<News> allNews = new ArrayList<>(repository.getAllNews());
+        List<News> allNews = new ArrayList<>(repository.readAllNews());
 
         for (int i = 0; i < allNews.size(); i++) {
             if (allNews.get(i).getId() == newsDTO.getId()) {
@@ -78,7 +78,7 @@ public class NewsController {
     }
 
     public List<NewsDTO> getAllNews() {
-        List<News> allEntityNews = repository.getAllNews();
+        List<News> allEntityNews = repository.readAllNews();
         List<NewsDTO> allNewsDTO = new ArrayList<>();
         for (News allEntityNew : allEntityNews) {
             allNewsDTO.add(newsMapper.sourceToDTO(allEntityNew));
@@ -91,7 +91,7 @@ public class NewsController {
     }
 
     private long getNewId() {
-        List<News> news = new ArrayList<>(repository.getAllNews());
+        List<News> news = new ArrayList<>(repository.readAllNews());
         return news.size() + 1;
     }
 
@@ -104,7 +104,7 @@ public class NewsController {
     }
 
     private boolean validateNews(String title, String content, long authorId) {
-        List<News> news = new ArrayList<>(repository.getAllNews());
+        List<News> news = new ArrayList<>(repository.readAllNews());
         List<Author> authors = new ArrayList<>(repository.getAllAuthors());
 
         if (title.length() <= 4) {

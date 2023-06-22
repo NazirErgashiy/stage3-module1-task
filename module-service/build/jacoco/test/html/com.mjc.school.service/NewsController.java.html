@@ -31,7 +31,7 @@ import java.util.TimeZone;
      * @return NewsDTO from REPOSITORY
      */
     public NewsDTO createNews(NewsDTO newsDTO) {
-<span class="fc" id="L34">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.getAllNews());</span>
+<span class="fc" id="L34">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.readAllNews());</span>
 
 <span class="fc" id="L36">        long newId = getNewId();</span>
 <span class="fc" id="L37">        newsDTO.setId(newId);</span>
@@ -42,19 +42,19 @@ import java.util.TimeZone;
 <span class="fc" id="L42">            News currentNewNews = newsMapper.dtoToSource(newsDTO);</span>
 <span class="fc" id="L43">            news.add(currentNewNews);</span>
 <span class="fc" id="L44">            repository.saveAllNews(news);</span>
-<span class="fc" id="L45">            return newsMapper.sourceToDTO(repository.getNewsById(newId));</span>
+<span class="fc" id="L45">            return newsMapper.sourceToDTO(repository.readByIdNews(newId));</span>
         }
 <span class="nc" id="L47">        throw new RuntimeException(&quot;Something gone wrong&quot;);</span>
     }
 
     public NewsDTO getNews(long id) {
         //get newsDTO id and get it from repository, then map entity to DTO and return.
-<span class="fc" id="L52">        return newsMapper.sourceToDTO(repository.getNewsById(id));</span>
+<span class="fc" id="L52">        return newsMapper.sourceToDTO(repository.readByIdNews(id));</span>
     }
 
     public NewsDTO updateNews(NewsDTO newsDTO) {
         //if updating news is exists
-<span class="fc" id="L57">        repository.getNewsById(newsDTO.getId());</span>
+<span class="fc" id="L57">        repository.readByIdNews(newsDTO.getId());</span>
 
 <span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {</span>
 <span class="fc" id="L60">            newsDTO.setLastUpdateDate(nowIso8601());</span>
@@ -65,7 +65,7 @@ import java.util.TimeZone;
     }
 
     public boolean deleteNews(NewsDTO newsDTO) {
-<span class="fc" id="L68">        List&lt;News&gt; allNews = new ArrayList&lt;&gt;(repository.getAllNews());</span>
+<span class="fc" id="L68">        List&lt;News&gt; allNews = new ArrayList&lt;&gt;(repository.readAllNews());</span>
 
 <span class="pc bpc" id="L70" title="1 of 2 branches missed.">        for (int i = 0; i &lt; allNews.size(); i++) {</span>
 <span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if (allNews.get(i).getId() == newsDTO.getId()) {</span>
@@ -78,7 +78,7 @@ import java.util.TimeZone;
     }
 
     public List&lt;NewsDTO&gt; getAllNews() {
-<span class="fc" id="L81">        List&lt;News&gt; allEntityNews = repository.getAllNews();</span>
+<span class="fc" id="L81">        List&lt;News&gt; allEntityNews = repository.readAllNews();</span>
 <span class="fc" id="L82">        List&lt;NewsDTO&gt; allNewsDTO = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L83" title="All 2 branches covered.">        for (News allEntityNew : allEntityNews) {</span>
 <span class="fc" id="L84">            allNewsDTO.add(newsMapper.sourceToDTO(allEntityNew));</span>
@@ -91,7 +91,7 @@ import java.util.TimeZone;
 <span class="nc" id="L91">    }</span>
 
     private long getNewId() {
-<span class="fc" id="L94">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.getAllNews());</span>
+<span class="fc" id="L94">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.readAllNews());</span>
 <span class="fc" id="L95">        return news.size() + 1;</span>
     }
 
@@ -104,7 +104,7 @@ import java.util.TimeZone;
     }
 
     private boolean validateNews(String title, String content, long authorId) {
-<span class="fc" id="L107">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.getAllNews());</span>
+<span class="fc" id="L107">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.readAllNews());</span>
 <span class="fc" id="L108">        List&lt;Author&gt; authors = new ArrayList&lt;&gt;(repository.getAllAuthors());</span>
 
 <span class="fc bfc" id="L110" title="All 2 branches covered.">        if (title.length() &lt;= 4) {</span>

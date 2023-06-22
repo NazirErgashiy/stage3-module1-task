@@ -43,7 +43,7 @@ class NewsControllerTest {
         news1.setContent("Amogus is SUS");
         allNews.add(news1);
         REPOSITORY.saveAllNews(allNews);
-        return NEWS_MAPPER.sourceToDTO(REPOSITORY.getNewsById(1));
+        return NEWS_MAPPER.sourceToDTO(REPOSITORY.readByIdNews(1));
     }
 
     @Test

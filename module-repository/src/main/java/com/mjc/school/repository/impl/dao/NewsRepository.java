@@ -1,9 +1,11 @@
 package com.mjc.school.repository.impl.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.exceptions.NewsNotFoundRuntimeException;
 import com.mjc.school.repository.impl.model.Author;
 import com.mjc.school.repository.impl.model.News;
+import com.mjc.school.repository.mapper.NewsMapperImpl;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +15,7 @@ import java.util.*;
 
 public class NewsRepository {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();//Jackson JSON
+    private final NewsMapperImpl mapper = new NewsMapperImpl();
 
     static {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
@@ -55,7 +58,7 @@ public class NewsRepository {
         }
     }
 
-    public List<News> getAllNews() {
+    public List<News> readAllNews() {
         File file = getNewsFile();
 
         try (FileInputStream fis = new FileInputStream(file)) {
@@ -69,8 +72,8 @@ public class NewsRepository {
         return null;
     }
 
-    public News getNewsById(long id) {
-        List<News> allNews = getAllNews();
+    public News readByIdNews(long id) {
+        List<News> allNews = readAllNews();
 
         for (int i = 0; i < allNews.size(); i++) {
             if (allNews.get(i).getId() == id) return allNews.get(i);
@@ -79,7 +82,7 @@ public class NewsRepository {
     }
 
     public News saveExistNews(News newsToSave) {
-        List<News> allNews = getAllNews();
+        List<News> allNews = readAllNews();
         for (int i = 0; 0 < allNews.size(); i++) {
             if (allNews.get(i).getId() == newsToSave.getId()) {
                 allNews.set(i, newsToSave);
@@ -87,7 +90,7 @@ public class NewsRepository {
             }
         }
         saveAllNews(allNews);
-        return getNewsById(newsToSave.getId());
+        return readByIdNews(newsToSave.getId());
     }
 
     public void saveAllNews(List<News> arr) {
@@ -100,11 +103,39 @@ public class NewsRepository {
         }
     }
 
+    public void createNews(){
+        //Implement
+    }
+
+    public News toDataSource(NewsDTO newsDTO) {
+        return mapper.dtoToSource(newsDTO);
+    }
+
+    public News updateNews(News news) {
+        //if updating news is exists
+        readByIdNews(news.getId());
+        //news.setLastUpdateDate(()); //UpdateTime
+        return saveExistNews(news);
+    }
+
+    public boolean deleteNews(News news) {
+        List<News> allNews = new ArrayList<>(readAllNews());
+
+        for (int i = 0; i < allNews.size(); i++) {
+            if (allNews.get(i).getId() == news.getId()) {
+                allNews.remove(i);
+                saveAllNews(allNews);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setDefaultNewsAndAuthors() {
 
         String correctPath = System.getProperty("user.dir");
 
-        if (correctPath.contains("\\module-repository")||correctPath.contains("\\module-service")) {
+        if (correctPath.contains("\\module-repository") || correctPath.contains("\\module-service")) {
             correctPath = correctPath.replace("\\module-repository", "");
             correctPath = correctPath.replace("\\module-service", "");
         }
@@ -133,7 +164,7 @@ public class NewsRepository {
     private File getNewsFile() {
         String correctPath = System.getProperty("user.dir");
 
-        if (correctPath.contains("\\module-repository")||correctPath.contains("\\module-service")) {
+        if (correctPath.contains("\\module-repository") || correctPath.contains("\\module-service")) {
             correctPath = correctPath.replace("\\module-repository", "");
             correctPath = correctPath.replace("\\module-service", "");
         }
@@ -144,7 +175,7 @@ public class NewsRepository {
     private File getAuthorFile() {
         String correctPath = System.getProperty("user.dir");
 
-        if (correctPath.contains("\\module-repository")||correctPath.contains("\\module-service")) {
+        if (correctPath.contains("\\module-repository") || correctPath.contains("\\module-service")) {
             correctPath = correctPath.replace("\\module-repository", "");
             correctPath = correctPath.replace("\\module-service", "");
 

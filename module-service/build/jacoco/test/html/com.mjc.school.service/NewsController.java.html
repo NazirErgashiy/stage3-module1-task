@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NewsController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">module-service</a> &gt; <a href="index.source.html" class="el_package">com.mjc.school.service</a> &gt; <span class="el_source">NewsController.java</span></div><h1>NewsController.java</h1><pre class="source lang-java linenums">package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
+import com.mjc.school.repository.impl.model.NewsModel;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.impl.dao.DataSourceRepository;
-import com.mjc.school.repository.impl.model.Author;
-import com.mjc.school.repository.impl.model.News;
+import com.mjc.school.repository.impl.dao.DataSource;
+import com.mjc.school.repository.impl.model.AuthorModel;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
 import com.mjc.school.service.exceptions.LengthRuntimeException;
 import com.mjc.school.service.exceptions.NewsAlreadyExistsRuntimeException;
@@ -20,7 +20,7 @@ import java.util.TimeZone;
 
 <span class="fc" id="L21">public class NewsController {</span>
 
-<span class="fc" id="L23">    private DataSourceRepository repository = new DataSourceRepository();</span>
+<span class="fc" id="L23">    private DataSource repository = new DataSource();</span>
 <span class="fc" id="L24">    private NewsMapperImpl newsMapper = new NewsMapperImpl();</span>
 
     /**
@@ -31,7 +31,7 @@ import java.util.TimeZone;
      * @return NewsDTO from REPOSITORY
      */
     public NewsDTO createNews(NewsDTO newsDTO) {
-<span class="fc" id="L34">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.readAllNews());</span>
+<span class="fc" id="L34">        List&lt;NewsModel&gt; newsModels = new ArrayList&lt;&gt;(repository.readAllNews());</span>
 
 <span class="fc" id="L36">        long newId = getNewId();</span>
 <span class="fc" id="L37">        newsDTO.setId(newId);</span>
@@ -39,9 +39,9 @@ import java.util.TimeZone;
 <span class="fc" id="L39">        newsDTO.setLastUpdateDate(nowIso8601());</span>
 
 <span class="pc bpc" id="L41" title="1 of 2 branches missed.">        if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {</span>
-<span class="fc" id="L42">            News currentNewNews = newsMapper.dtoToSource(newsDTO);</span>
-<span class="fc" id="L43">            news.add(currentNewNews);</span>
-<span class="fc" id="L44">            repository.saveAllNews(news);</span>
+<span class="fc" id="L42">            NewsModel currentNewNewsModel = newsMapper.dtoToSource(newsDTO);</span>
+<span class="fc" id="L43">            newsModels.add(currentNewNewsModel);</span>
+<span class="fc" id="L44">            repository.saveAllNews(newsModels);</span>
 <span class="fc" id="L45">            return newsMapper.sourceToDTO(repository.readByIdNews(newId));</span>
         }
 <span class="nc" id="L47">        throw new RuntimeException(&quot;Something gone wrong&quot;);</span>
@@ -58,14 +58,14 @@ import java.util.TimeZone;
 
 <span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {</span>
 <span class="fc" id="L60">            newsDTO.setLastUpdateDate(nowIso8601());</span>
-<span class="fc" id="L61">            News entityNews = newsMapper.dtoToSource(newsDTO);</span>
-<span class="fc" id="L62">            return newsMapper.sourceToDTO(repository.saveExistNews(entityNews));</span>
+<span class="fc" id="L61">            NewsModel entityNewsModel = newsMapper.dtoToSource(newsDTO);</span>
+<span class="fc" id="L62">            return newsMapper.sourceToDTO(repository.saveExistNews(entityNewsModel));</span>
         }
 <span class="nc" id="L64">        throw new RuntimeException(&quot;Something gone wrong&quot;);</span>
     }
 
     public boolean deleteNews(NewsDTO newsDTO) {
-<span class="fc" id="L68">        List&lt;News&gt; allNews = new ArrayList&lt;&gt;(repository.readAllNews());</span>
+<span class="fc" id="L68">        List&lt;NewsModel&gt; allNews = new ArrayList&lt;&gt;(repository.readAllNews());</span>
 
 <span class="pc bpc" id="L70" title="1 of 2 branches missed.">        for (int i = 0; i &lt; allNews.size(); i++) {</span>
 <span class="pc bpc" id="L71" title="1 of 2 branches missed.">            if (allNews.get(i).getId() == newsDTO.getId()) {</span>
@@ -78,9 +78,9 @@ import java.util.TimeZone;
     }
 
     public List&lt;NewsDTO&gt; getAllNews() {
-<span class="fc" id="L81">        List&lt;News&gt; allEntityNews = repository.readAllNews();</span>
+<span class="fc" id="L81">        List&lt;NewsModel&gt; allEntityNews = repository.readAllNews();</span>
 <span class="fc" id="L82">        List&lt;NewsDTO&gt; allNewsDTO = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (News allEntityNew : allEntityNews) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        for (NewsModel allEntityNew : allEntityNews) {</span>
 <span class="fc" id="L84">            allNewsDTO.add(newsMapper.sourceToDTO(allEntityNew));</span>
 <span class="fc" id="L85">        }</span>
 <span class="fc" id="L86">        return allNewsDTO;</span>
@@ -91,8 +91,8 @@ import java.util.TimeZone;
 <span class="nc" id="L91">    }</span>
 
     private long getNewId() {
-<span class="fc" id="L94">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.readAllNews());</span>
-<span class="fc" id="L95">        return news.size() + 1;</span>
+<span class="fc" id="L94">        List&lt;NewsModel&gt; newsModels = new ArrayList&lt;&gt;(repository.readAllNews());</span>
+<span class="fc" id="L95">        return newsModels.size() + 1;</span>
     }
 
     private LocalDateTime nowIso8601() {
@@ -104,8 +104,8 @@ import java.util.TimeZone;
     }
 
     private boolean validateNews(String title, String content, long authorId) {
-<span class="fc" id="L107">        List&lt;News&gt; news = new ArrayList&lt;&gt;(repository.readAllNews());</span>
-<span class="fc" id="L108">        List&lt;Author&gt; authors = new ArrayList&lt;&gt;(repository.getAllAuthors());</span>
+<span class="fc" id="L107">        List&lt;NewsModel&gt; newsModels = new ArrayList&lt;&gt;(repository.readAllNews());</span>
+<span class="fc" id="L108">        List&lt;AuthorModel&gt; authorModels = new ArrayList&lt;&gt;(repository.getAllAuthors());</span>
 
 <span class="fc bfc" id="L110" title="All 2 branches covered.">        if (title.length() &lt;= 4) {</span>
 <span class="fc" id="L111">            throw new LengthRuntimeException(&quot;Title length is too small! [&lt;5]&quot;);</span>
@@ -120,15 +120,15 @@ import java.util.TimeZone;
 <span class="fc" id="L120">            throw new LengthRuntimeException(&quot;Content length is too big! [&gt;255]&quot;);</span>
         }
 <span class="fc" id="L122">        boolean isContainsAuthorId = false;</span>
-<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (Author author : authors) {</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (AuthorModel authorModel : authorModels) {</span>
 
-<span class="pc bpc" id="L125" title="1 of 2 branches missed.">            if (author.getId() == authorId) {</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">            if (authorModel.getId() == authorId) {</span>
 <span class="fc" id="L126">                isContainsAuthorId = true;</span>
 <span class="fc" id="L127">                break;</span>
             }
 <span class="nc" id="L129">        }</span>
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (News currentNews : news) {</span>
-<span class="pc bpc" id="L131" title="1 of 4 branches missed.">            if (title.equals(currentNews.getTitle()) &amp;&amp; content.equals(currentNews.getContent())) {</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (NewsModel currentNewsModel : newsModels) {</span>
+<span class="pc bpc" id="L131" title="1 of 4 branches missed.">            if (title.equals(currentNewsModel.getTitle()) &amp;&amp; content.equals(currentNewsModel.getContent())) {</span>
 <span class="fc" id="L132">                throw new NewsAlreadyExistsRuntimeException(&quot;Current news is already exists&quot;);</span>
             }
 <span class="fc" id="L134">        }</span>

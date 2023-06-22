@@ -1,41 +1,41 @@
 package com.mjc.school.repository.mapper;
 
 import com.mjc.school.repository.dto.AuthorDTO;
-import com.mjc.school.repository.impl.model.Author;
+import com.mjc.school.repository.impl.model.AuthorModel;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-22T17:59:54+0500",
+    date = "2023-06-22T18:15:24+0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.4 (Oracle Corporation)"
 )
 public class AuthorMapperImpl implements AuthorMapper {
 
     @Override
-    public Author dtoToSource(AuthorDTO author) {
+    public AuthorModel dtoToSource(AuthorDTO author) {
         if ( author == null ) {
             return null;
         }
 
-        Author author1 = new Author();
+        AuthorModel authorModel = new AuthorModel();
 
-        author1.setId( author.getId() );
-        author1.setName( author.getName() );
+        authorModel.setId( author.getId() );
+        authorModel.setName( author.getName() );
 
-        return author1;
+        return authorModel;
     }
 
     @Override
-    public AuthorDTO sourceToDTO(Author authorDTO) {
-        if ( authorDTO == null ) {
+    public AuthorDTO sourceToDTO(AuthorModel authorModelDTO) {
+        if ( authorModelDTO == null ) {
             return null;
         }
 
-        AuthorDTO authorDTO1 = new AuthorDTO();
+        AuthorDTO authorDTO = new AuthorDTO();
 
-        authorDTO1.setId( authorDTO.getId() );
-        authorDTO1.setName( authorDTO.getName() );
+        authorDTO.setId( authorModelDTO.getId() );
+        authorDTO.setName( authorModelDTO.getName() );
 
-        return authorDTO1;
+        return authorDTO;
     }
 }

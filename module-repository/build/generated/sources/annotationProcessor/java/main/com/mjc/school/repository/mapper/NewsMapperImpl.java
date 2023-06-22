@@ -1,49 +1,49 @@
 package com.mjc.school.repository.mapper;
 
 import com.mjc.school.repository.dto.NewsDTO;
-import com.mjc.school.repository.impl.model.News;
+import com.mjc.school.repository.impl.model.NewsModel;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-22T17:59:54+0500",
+    date = "2023-06-22T18:15:24+0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.4 (Oracle Corporation)"
 )
 public class NewsMapperImpl implements NewsMapper {
 
     @Override
-    public News dtoToSource(NewsDTO news) {
+    public NewsModel dtoToSource(NewsDTO news) {
         if ( news == null ) {
             return null;
         }
 
-        News news1 = new News();
+        NewsModel newsModel = new NewsModel();
 
-        news1.setId( news.getId() );
-        news1.setTitle( news.getTitle() );
-        news1.setContent( news.getContent() );
-        news1.setCreateDate( news.getCreateDate() );
-        news1.setLastUpdateDate( news.getLastUpdateDate() );
-        news1.setAuthorId( news.getAuthorId() );
+        newsModel.setId( news.getId() );
+        newsModel.setTitle( news.getTitle() );
+        newsModel.setContent( news.getContent() );
+        newsModel.setCreateDate( news.getCreateDate() );
+        newsModel.setLastUpdateDate( news.getLastUpdateDate() );
+        newsModel.setAuthorId( news.getAuthorId() );
 
-        return news1;
+        return newsModel;
     }
 
     @Override
-    public NewsDTO sourceToDTO(News newsDTO) {
-        if ( newsDTO == null ) {
+    public NewsDTO sourceToDTO(NewsModel newsModelDTO) {
+        if ( newsModelDTO == null ) {
             return null;
         }
 
-        NewsDTO newsDTO1 = new NewsDTO();
+        NewsDTO newsDTO = new NewsDTO();
 
-        newsDTO1.setId( newsDTO.getId() );
-        newsDTO1.setTitle( newsDTO.getTitle() );
-        newsDTO1.setContent( newsDTO.getContent() );
-        newsDTO1.setCreateDate( newsDTO.getCreateDate() );
-        newsDTO1.setLastUpdateDate( newsDTO.getLastUpdateDate() );
-        newsDTO1.setAuthorId( newsDTO.getAuthorId() );
+        newsDTO.setId( newsModelDTO.getId() );
+        newsDTO.setTitle( newsModelDTO.getTitle() );
+        newsDTO.setContent( newsModelDTO.getContent() );
+        newsDTO.setCreateDate( newsModelDTO.getCreateDate() );
+        newsDTO.setLastUpdateDate( newsModelDTO.getLastUpdateDate() );
+        newsDTO.setAuthorId( newsModelDTO.getAuthorId() );
 
-        return newsDTO1;
+        return newsDTO;
     }
 }

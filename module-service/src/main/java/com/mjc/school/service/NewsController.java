@@ -1,10 +1,10 @@
 package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
+import com.mjc.school.repository.impl.model.NewsModel;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.impl.dao.DataSourceRepository;
-import com.mjc.school.repository.impl.model.Author;
-import com.mjc.school.repository.impl.model.News;
+import com.mjc.school.repository.impl.dao.DataSource;
+import com.mjc.school.repository.impl.model.AuthorModel;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
 import com.mjc.school.service.exceptions.LengthRuntimeException;
 import com.mjc.school.service.exceptions.NewsAlreadyExistsRuntimeException;
@@ -20,7 +20,7 @@ import java.util.TimeZone;
 
 public class NewsController {
 
-    private DataSourceRepository repository = new DataSourceRepository();
+    private DataSource repository = new DataSource();
     private NewsMapperImpl newsMapper = new NewsMapperImpl();
 
     /**
@@ -31,7 +31,7 @@ public class NewsController {
      * @return NewsDTO from REPOSITORY
      */
     public NewsDTO createNews(NewsDTO newsDTO) {
-        List<News> news = new ArrayList<>(repository.readAllNews());
+        List<NewsModel> newsModels = new ArrayList<>(repository.readAllNews());
 
         long newId = getNewId();
         newsDTO.setId(newId);
@@ -39,9 +39,9 @@ public class NewsController {
         newsDTO.setLastUpdateDate(nowIso8601());
 
         if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {
-            News currentNewNews = newsMapper.dtoToSource(newsDTO);
-            news.add(currentNewNews);
-            repository.saveAllNews(news);
+            NewsModel currentNewNewsModel = newsMapper.dtoToSource(newsDTO);
+            newsModels.add(currentNewNewsModel);
+            repository.saveAllNews(newsModels);
             return newsMapper.sourceToDTO(repository.readByIdNews(newId));
         }
         throw new RuntimeException("Something gone wrong");
@@ -58,14 +58,14 @@ public class NewsController {
 
         if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {
             newsDTO.setLastUpdateDate(nowIso8601());
-            News entityNews = newsMapper.dtoToSource(newsDTO);
-            return newsMapper.sourceToDTO(repository.saveExistNews(entityNews));
+            NewsModel entityNewsModel = newsMapper.dtoToSource(newsDTO);
+            return newsMapper.sourceToDTO(repository.saveExistNews(entityNewsModel));
         }
         throw new RuntimeException("Something gone wrong");
     }
 
     public boolean deleteNews(NewsDTO newsDTO) {
-        List<News> allNews = new ArrayList<>(repository.readAllNews());
+        List<NewsModel> allNews = new ArrayList<>(repository.readAllNews());
 
         for (int i = 0; i < allNews.size(); i++) {
             if (allNews.get(i).getId() == newsDTO.getId()) {
@@ -78,9 +78,9 @@ public class NewsController {
     }
 
     public List<NewsDTO> getAllNews() {
-        List<News> allEntityNews = repository.readAllNews();
+        List<NewsModel> allEntityNews = repository.readAllNews();
         List<NewsDTO> allNewsDTO = new ArrayList<>();
-        for (News allEntityNew : allEntityNews) {
+        for (NewsModel allEntityNew : allEntityNews) {
             allNewsDTO.add(newsMapper.sourceToDTO(allEntityNew));
         }
         return allNewsDTO;
@@ -91,8 +91,8 @@ public class NewsController {
     }
 
     private long getNewId() {
-        List<News> news = new ArrayList<>(repository.readAllNews());
-        return news.size() + 1;
+        List<NewsModel> newsModels = new ArrayList<>(repository.readAllNews());
+        return newsModels.size() + 1;
     }
 
     private LocalDateTime nowIso8601() {
@@ -104,8 +104,8 @@ public class NewsController {
     }
 
     private boolean validateNews(String title, String content, long authorId) {
-        List<News> news = new ArrayList<>(repository.readAllNews());
-        List<Author> authors = new ArrayList<>(repository.getAllAuthors());
+        List<NewsModel> newsModels = new ArrayList<>(repository.readAllNews());
+        List<AuthorModel> authorModels = new ArrayList<>(repository.getAllAuthors());
 
         if (title.length() <= 4) {
             throw new LengthRuntimeException("Title length is too small! [<5]");
@@ -120,15 +120,15 @@ public class NewsController {
             throw new LengthRuntimeException("Content length is too big! [>255]");
         }
         boolean isContainsAuthorId = false;
-        for (Author author : authors) {
+        for (AuthorModel authorModel : authorModels) {
 
-            if (author.getId() == authorId) {
+            if (authorModel.getId() == authorId) {
                 isContainsAuthorId = true;
                 break;
             }
         }
-        for (News currentNews : news) {
-            if (title.equals(currentNews.getTitle()) && content.equals(currentNews.getContent())) {
+        for (NewsModel currentNewsModel : newsModels) {
+            if (title.equals(currentNewsModel.getTitle()) && content.equals(currentNewsModel.getContent())) {
                 throw new NewsAlreadyExistsRuntimeException("Current news is already exists");
             }
         }

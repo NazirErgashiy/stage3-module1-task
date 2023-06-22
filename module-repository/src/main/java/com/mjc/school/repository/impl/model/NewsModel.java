@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class News {
+public class NewsModel {
     private long id;
     private String title;
     private String content;

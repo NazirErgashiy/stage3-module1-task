@@ -1,10 +1,10 @@
 package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
+import com.mjc.school.repository.impl.model.AuthorModel;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.impl.dao.DataSourceRepository;
-import com.mjc.school.repository.impl.model.Author;
-import com.mjc.school.repository.impl.model.News;
+import com.mjc.school.repository.impl.dao.DataSource;
+import com.mjc.school.repository.impl.model.NewsModel;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
 import com.mjc.school.service.exceptions.LengthRuntimeException;
 import com.mjc.school.service.exceptions.NewsAlreadyExistsRuntimeException;
@@ -15,10 +15,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NewsControllerTest {
+class NewsModelControllerTest {
 
     private final NewsController NEWS_CONTROLLER = new NewsController();
-    private final DataSourceRepository REPOSITORY = new DataSourceRepository();
+    private final DataSource REPOSITORY = new DataSource();
     private final NewsMapperImpl NEWS_MAPPER = new NewsMapperImpl();
 
     private void clearRepository() {
@@ -27,21 +27,21 @@ class NewsControllerTest {
     }
 
     private void setToRepositoryAuthor() {
-        ArrayList<Author> authors = new ArrayList<>();
-        Author author = new Author();
-        author.setId(1);
-        author.setName("Alex");
-        authors.add(author);
-        REPOSITORY.saveAllAuthors(authors);
+        ArrayList<AuthorModel> authorModels = new ArrayList<>();
+        AuthorModel authorModel = new AuthorModel();
+        authorModel.setId(1);
+        authorModel.setName("Alex");
+        authorModels.add(authorModel);
+        REPOSITORY.saveAllAuthors(authorModels);
     }
 
     private NewsDTO addNewsToRepo() {
-        ArrayList<News> allNews = new ArrayList<>();
-        News news1 = new News();
-        news1.setId(1);
-        news1.setTitle("Amogus");
-        news1.setContent("Amogus is SUS");
-        allNews.add(news1);
+        ArrayList<NewsModel> allNews = new ArrayList<>();
+        NewsModel newsModel1 = new NewsModel();
+        newsModel1.setId(1);
+        newsModel1.setTitle("Amogus");
+        newsModel1.setContent("Amogus is SUS");
+        allNews.add(newsModel1);
         REPOSITORY.saveAllNews(allNews);
         return NEWS_MAPPER.sourceToDTO(REPOSITORY.readByIdNews(1));
     }

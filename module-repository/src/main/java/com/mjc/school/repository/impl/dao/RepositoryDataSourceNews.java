@@ -11,7 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class DataSource {
+public class RepositoryDataSourceNews {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();//Jackson JSON
 
     static {
@@ -20,7 +20,7 @@ public class DataSource {
         OBJECT_MAPPER.findAndRegisterModules();
     }
 
-    public DataSource() {
+    public RepositoryDataSourceNews() {
     }
 
     public List<AuthorModel> getAllAuthors() {
@@ -69,7 +69,7 @@ public class DataSource {
         return null;
     }
 
-    public NewsModel readByIdNews(long id) {
+    public NewsModel readByIdNews(Long id) {
         List<NewsModel> allNews = readAllNews();
 
         for (int i = 0; i < allNews.size(); i++) {

@@ -3,7 +3,7 @@ package com.mjc.school.service;
 import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.impl.model.AuthorModel;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.impl.dao.DataSource;
+import com.mjc.school.repository.impl.dao.RepositoryDataSourceNews;
 import com.mjc.school.repository.impl.model.NewsModel;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
 import com.mjc.school.service.exceptions.LengthRuntimeException;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NewsModelControllerTest {
 
     private final NewsController NEWS_CONTROLLER = new NewsController();
-    private final DataSource REPOSITORY = new DataSource();
+    private final RepositoryDataSourceNews REPOSITORY = new RepositoryDataSourceNews();
     private final NewsMapperImpl NEWS_MAPPER = new NewsMapperImpl();
 
     private void clearRepository() {
@@ -43,7 +43,7 @@ class NewsModelControllerTest {
         newsModel1.setContent("Amogus is SUS");
         allNews.add(newsModel1);
         REPOSITORY.saveAllNews(allNews);
-        return NEWS_MAPPER.sourceToDTO(REPOSITORY.readByIdNews(1));
+        return NEWS_MAPPER.sourceToDTO(REPOSITORY.readByIdNews(1L));
     }
 
     @Test

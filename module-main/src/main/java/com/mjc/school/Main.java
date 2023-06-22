@@ -1,7 +1,7 @@
 package com.mjc.school;
 
 import com.mjc.school.controller.Controller;
-import com.mjc.school.repository.impl.dao.DataSource;
+import com.mjc.school.repository.impl.dao.RepositoryDataSourceNews;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         Controller mainController = new Controller();
-        DataSource repository = new DataSource();
+        RepositoryDataSourceNews repository = new RepositoryDataSourceNews();
         repository.setDefaultNewsAndAuthors();
         boolean exit = false;
 

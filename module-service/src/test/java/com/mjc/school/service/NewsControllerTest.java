@@ -2,9 +2,9 @@ package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.persistance.dao.NewsRepository;
-import com.mjc.school.repository.persistance.entity.Author;
-import com.mjc.school.repository.persistance.entity.News;
+import com.mjc.school.repository.impl.dao.NewsRepository;
+import com.mjc.school.repository.impl.model.Author;
+import com.mjc.school.repository.impl.model.News;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
 import com.mjc.school.service.exceptions.LengthRuntimeException;
 import com.mjc.school.service.exceptions.NewsAlreadyExistsRuntimeException;
@@ -175,7 +175,7 @@ class NewsControllerTest {
         NewsDTO searchingDTO = new NewsDTO();
         searchingDTO.setId(1);
 
-        assertEquals(getNews, NEWS_CONTROLLER.getNews(searchingDTO));
+        assertEquals(getNews, NEWS_CONTROLLER.getNews(searchingDTO.getId()));
     }
 
     @Test
@@ -205,9 +205,9 @@ class NewsControllerTest {
     void getAllNews() {
         clearRepository();
         setToRepositoryAuthor();
-        NewsDTO dto=addNewsToRepo();
+        NewsDTO dto = addNewsToRepo();
 
-        List<NewsDTO> allNewsDTO=new ArrayList<>();
+        List<NewsDTO> allNewsDTO = new ArrayList<>();
 
         NewsDTO originNewsDTO = new NewsDTO();
         originNewsDTO.setId(0);
@@ -219,6 +219,6 @@ class NewsControllerTest {
         allNewsDTO.add(dto);
         allNewsDTO.add(newsDTO);
 
-        assertEquals(allNewsDTO,NEWS_CONTROLLER.getAllNews());
+        assertEquals(allNewsDTO, NEWS_CONTROLLER.getAllNews());
     }
 }

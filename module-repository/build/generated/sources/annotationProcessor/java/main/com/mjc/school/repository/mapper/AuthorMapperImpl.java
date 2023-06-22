@@ -1,12 +1,12 @@
 package com.mjc.school.repository.mapper;
 
 import com.mjc.school.repository.dto.AuthorDTO;
-import com.mjc.school.repository.persistance.entity.Author;
+import com.mjc.school.repository.impl.model.Author;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-22T14:08:46+0500",
+    date = "2023-06-22T17:06:32+0500",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.2.jar, environment: Java 17.0.4 (Oracle Corporation)"
 )
 public class AuthorMapperImpl implements AuthorMapper {

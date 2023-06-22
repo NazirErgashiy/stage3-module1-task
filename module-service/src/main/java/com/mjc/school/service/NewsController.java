@@ -2,9 +2,9 @@ package com.mjc.school.service;
 
 import com.mjc.school.repository.dto.NewsDTO;
 import com.mjc.school.repository.mapper.NewsMapperImpl;
-import com.mjc.school.repository.persistance.dao.NewsRepository;
-import com.mjc.school.repository.persistance.entity.Author;
-import com.mjc.school.repository.persistance.entity.News;
+import com.mjc.school.repository.impl.dao.NewsRepository;
+import com.mjc.school.repository.impl.model.Author;
+import com.mjc.school.repository.impl.model.News;
 import com.mjc.school.service.exceptions.AuthorNotFoundRuntimeException;
 import com.mjc.school.service.exceptions.LengthRuntimeException;
 import com.mjc.school.service.exceptions.NewsAlreadyExistsRuntimeException;
@@ -20,8 +20,8 @@ import java.util.TimeZone;
 
 public class NewsController {
 
-    private final NewsRepository REPOSITORY = new NewsRepository();
-    private final NewsMapperImpl NEWS_MAPPER = new NewsMapperImpl();
+    private NewsRepository repository = new NewsRepository();
+    private NewsMapperImpl newsMapper = new NewsMapperImpl();
 
     /**
      * <p>Put NewsDTO type without id, createDate, lastUpdateDate;</p>
@@ -31,7 +31,7 @@ public class NewsController {
      * @return NewsDTO from REPOSITORY
      */
     public NewsDTO createNews(NewsDTO newsDTO) {
-        List<News> news = new ArrayList<>(REPOSITORY.getAllNews());
+        List<News> news = new ArrayList<>(repository.getAllNews());
 
         long newId = getNewId();
         newsDTO.setId(newId);
@@ -39,38 +39,38 @@ public class NewsController {
         newsDTO.setLastUpdateDate(nowIso8601());
 
         if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {
-            News currentNewNews = NEWS_MAPPER.dtoToSource(newsDTO);
+            News currentNewNews = newsMapper.dtoToSource(newsDTO);
             news.add(currentNewNews);
-            REPOSITORY.saveAllNews(news);
-            return NEWS_MAPPER.sourceToDTO(REPOSITORY.getNewsById(newId));
+            repository.saveAllNews(news);
+            return newsMapper.sourceToDTO(repository.getNewsById(newId));
         }
         throw new RuntimeException("Something gone wrong");
     }
 
-    public NewsDTO getNews(NewsDTO newsDTO) {
+    public NewsDTO getNews(long id) {
         //get newsDTO id and get it from repository, then map entity to DTO and return.
-        return NEWS_MAPPER.sourceToDTO(REPOSITORY.getNewsById(newsDTO.getId()));
+        return newsMapper.sourceToDTO(repository.getNewsById(id));
     }
 
     public NewsDTO updateNews(NewsDTO newsDTO) {
         //if updating news is exists
-        REPOSITORY.getNewsById(newsDTO.getId());
+        repository.getNewsById(newsDTO.getId());
 
         if (validateNews(newsDTO.getTitle(), newsDTO.getContent(), newsDTO.getAuthorId())) {
             newsDTO.setLastUpdateDate(nowIso8601());
-            News entityNews = NEWS_MAPPER.dtoToSource(newsDTO);
-            return NEWS_MAPPER.sourceToDTO(REPOSITORY.saveExistNews(entityNews));
+            News entityNews = newsMapper.dtoToSource(newsDTO);
+            return newsMapper.sourceToDTO(repository.saveExistNews(entityNews));
         }
         throw new RuntimeException("Something gone wrong");
     }
 
     public boolean deleteNews(NewsDTO newsDTO) {
-        List<News> allNews = new ArrayList<>(REPOSITORY.getAllNews());
+        List<News> allNews = new ArrayList<>(repository.getAllNews());
 
         for (int i = 0; i < allNews.size(); i++) {
             if (allNews.get(i).getId() == newsDTO.getId()) {
                 allNews.remove(i);
-                REPOSITORY.saveAllNews(allNews);
+                repository.saveAllNews(allNews);
                 return true;
             }
         }
@@ -78,16 +78,20 @@ public class NewsController {
     }
 
     public List<NewsDTO> getAllNews() {
-        List<News> allEntityNews = REPOSITORY.getAllNews();
+        List<News> allEntityNews = repository.getAllNews();
         List<NewsDTO> allNewsDTO = new ArrayList<>();
         for (News allEntityNew : allEntityNews) {
-            allNewsDTO.add(NEWS_MAPPER.sourceToDTO(allEntityNew));
+            allNewsDTO.add(newsMapper.sourceToDTO(allEntityNew));
         }
         return allNewsDTO;
     }
 
+    public void setDefaultData(){
+        repository.setDefaultNewsAndAuthors();
+    }
+
     private long getNewId() {
-        List<News> news = new ArrayList<>(REPOSITORY.getAllNews());
+        List<News> news = new ArrayList<>(repository.getAllNews());
         return news.size() + 1;
     }
 
@@ -100,8 +104,8 @@ public class NewsController {
     }
 
     private boolean validateNews(String title, String content, long authorId) {
-        List<News> news = new ArrayList<>(REPOSITORY.getAllNews());
-        List<Author> authors = new ArrayList<>(REPOSITORY.getAllAuthors());
+        List<News> news = new ArrayList<>(repository.getAllNews());
+        List<Author> authors = new ArrayList<>(repository.getAllAuthors());
 
         if (title.length() <= 4) {
             throw new LengthRuntimeException("Title length is too small! [<5]");

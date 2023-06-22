@@ -1,4 +1,4 @@
-package com.mjc.school.repository.persistance.entity;
+package com.mjc.school.repository.impl.model;
 
 import lombok.Data;
 

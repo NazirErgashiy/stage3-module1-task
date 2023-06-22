@@ -1,7 +1,7 @@
-package com.mjc.school.repository.persistance.dao;
+package com.mjc.school.repository.impl.dao;
 
-import com.mjc.school.repository.persistance.entity.Author;
-import com.mjc.school.repository.persistance.entity.News;
+import com.mjc.school.repository.impl.model.Author;
+import com.mjc.school.repository.impl.model.News;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class NewsRepositoryTest {
 
     NewsRepository newsRepository = new NewsRepository();
+
 
     @Test
     void getAllAuthors() {
@@ -75,4 +76,5 @@ class NewsRepositoryTest {
         assertEquals(currentTime, arr.get(1).getLastUpdateDate());
         assertEquals(1, arr.get(1).getAuthorId());
     }
+
 }

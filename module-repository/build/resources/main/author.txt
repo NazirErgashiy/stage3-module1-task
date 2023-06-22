@@ -1,1 +1,1 @@
-[{"id":1,"name":"Nazir"},{"id":2,"name":"Alex"},{"id":3,"name":"Max"},{"id":4,"name":"Maxim"},{"id":5,"name":"Aleksey"},{"id":6,"name":"Tikhon"},{"id":7,"name":"Shahzod"},{"id":8,"name":"Andrey"},{"id":9,"name":"Shahram"},{"id":10,"name":"Jack"}]
+[{"id":1,"name":"Alex"}]

@@ -1,7 +1,7 @@
 package com.mjc.school.repository.mapper;
 
 import com.mjc.school.repository.dto.NewsDTO;
-import com.mjc.school.repository.persistance.entity.News;
+import com.mjc.school.repository.impl.model.News;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

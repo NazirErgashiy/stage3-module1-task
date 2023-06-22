@@ -1,9 +1,9 @@
-package com.mjc.school.repository.persistance.dao;
+package com.mjc.school.repository.impl.dao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mjc.school.repository.exceptions.NewsNotFoundRuntimeException;
-import com.mjc.school.repository.persistance.entity.Author;
-import com.mjc.school.repository.persistance.entity.News;
+import com.mjc.school.repository.impl.model.Author;
+import com.mjc.school.repository.impl.model.News;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +18,9 @@ public class NewsRepository {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         OBJECT_MAPPER.setDateFormat(df);
         OBJECT_MAPPER.findAndRegisterModules();
+    }
+
+    public NewsRepository() {
     }
 
     public List<Author> getAllAuthors() {
@@ -54,6 +57,7 @@ public class NewsRepository {
 
     public List<News> getAllNews() {
         File file = getNewsFile();
+
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
@@ -97,7 +101,15 @@ public class NewsRepository {
     }
 
     public void setDefaultNewsAndAuthors() {
-        File file = new File("../module-repository/src/main/resources/default/news.txt");
+
+        String correctPath = System.getProperty("user.dir");
+
+        if (correctPath.contains("\\module-repository")||correctPath.contains("\\module-service")) {
+            correctPath = correctPath.replace("\\module-repository", "");
+            correctPath = correctPath.replace("\\module-service", "");
+        }
+
+        File file = new File(correctPath + "/module-repository/src/main/resources/default/news.txt");
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
@@ -107,7 +119,7 @@ public class NewsRepository {
             System.out.println(e.getMessage());
         }
 
-        File fileAuthor = new File("../module-repository/src/main/resources/default/author.txt");
+        File fileAuthor = new File(correctPath + "/module-repository/src/main/resources/default/author.txt");
         try (FileInputStream fis = new FileInputStream(fileAuthor)) {
             byte[] data = new byte[(int) fileAuthor.length()];
             fis.read(data);
@@ -119,10 +131,24 @@ public class NewsRepository {
     }
 
     private File getNewsFile() {
-        return new File("../module-repository/src/main/resources/news.txt");
+        String correctPath = System.getProperty("user.dir");
+
+        if (correctPath.contains("\\module-repository")||correctPath.contains("\\module-service")) {
+            correctPath = correctPath.replace("\\module-repository", "");
+            correctPath = correctPath.replace("\\module-service", "");
+        }
+
+        return new File(correctPath + "/module-repository/src/main/resources/news.txt");
     }
 
     private File getAuthorFile() {
-        return new File("../module-repository/src/main/resources/author.txt");
+        String correctPath = System.getProperty("user.dir");
+
+        if (correctPath.contains("\\module-repository")||correctPath.contains("\\module-service")) {
+            correctPath = correctPath.replace("\\module-repository", "");
+            correctPath = correctPath.replace("\\module-service", "");
+
+        }
+        return new File(correctPath + "/module-repository/src/main/resources/author.txt");
     }
 }
